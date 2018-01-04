@@ -9,7 +9,7 @@
     <option name="TEMPLATE_CONFIGURATION" value="Jinja2" />
     <option name="TEMPLATE_FOLDERS">
       <list>
-        <option value="$MODULE_DIR$/../shekinah1995_flask\templates" />
+        <option value="$MODULE_DIR$/gs/templates" />
       </list>
     </option>
   </component>

@@ -3,6 +3,7 @@
 from flask import Flask
 
 from conf import server
+from gs.common import cjinjafilters
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'J0T01M/2yX P~XHY111111]PPO/,?IT3'
@@ -21,8 +22,8 @@ clogger.init(loggerconf.LOGNAME_BLOG)
 from common import cdb
 
 cdb.init_flaskdb(app)
+from views import bp_blog
 
-if server.MYSERVER == server.SERVER_MI:
-    from views import blog
+app.register_blueprint(bp_blog)
 
-    app.register_blueprint(blog)
+cjinjafilters.init(app)
