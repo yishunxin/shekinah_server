@@ -42,6 +42,20 @@ class Paper(db.Model):
         return '<Paper paper_id=%s>' % self.paper_id
 
 
+class Essay(db.Model):
+    __tablename__ = 'essay'
+    essay_id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String)
+    create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
+    content = db.Column(db.String)
+    author = db.Column(db.String)
+    catalog_id = db.Column(db.Integer)
+    status = db.Column(db.Integer)
+
+    def __repr__(self):
+        return '<Essay essay_id=%s>' % self.essay_id
+
+
 class Papertag(db.Model):
     __tablename__ = 'paper_tag'
     paper_id = db.Column(db.Integer, primary_key=True)
