@@ -1,13 +1,9 @@
 # -*- coding:utf-8 -*-
-__author__ = 'weijingqi'
-
-# 线上数据库
-HOST = '121.41.81.213'
-#HOST = '120.27.149.24'
+HOST = 'rm-uf6wy8u1cb50d61bto.mysql.rds.aliyuncs.com'
 PORT = 3306
-USER = 'mi_user'
-PASSWD = 'mi_user_123!'
-DB = 'mi_test'
+USER = 'shekinah'
+PASSWD = 'ysb247365yStx'
+DB = 'myblog'
 CHARSET = 'utf8'
 # sqlalchemy 配置 看下面的链接
 # http://www.pythondoc.com/flask-sqlalchemy/config.html
