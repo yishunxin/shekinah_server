@@ -1,5 +1,8 @@
 # -*- coding:utf-8 -*-
 import logging
+
+from sqlalchemy import desc
+
 from gs.common.cdb import db
 from gs.conf import const
 from gs.model.blog import Paper
@@ -12,7 +15,14 @@ class PaperSvc(object):
         paper = db.session.query(Paper).get(paper_id)
         return paper
 
-    def paper_list(self, start=0, limit=const.DEFAULT_LIMIT):
+    def paper_list(self, start=None, limit=const.DEFAULT_LIMIT):
         q = db.session.query(Paper)
-        q = q.offset(start).limit(limit)
-        return q.all()
+        count = q.count()
+        if start is not None:
+            q = q.offset(start).limit(limit)
+        paper_list = q.all()
+        return count, paper_list
+
+    def last_paper(self):
+        papers = db.session.query(Paper).order_by(desc(Paper.create_time)).limit(const.DEFAULT_LIMIT).all()
+        return papers

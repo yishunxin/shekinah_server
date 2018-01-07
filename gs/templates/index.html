@@ -26,59 +26,74 @@
 {% block title_list %}
 
 
-{% for blog_info in blog_infos %}
-    {% include "list_style.html" %}
+    {% for blog_info in paper_list %}
+        {% include "list_style.html" %}
 
-{% else %}
-    <h3>这里空空的，过几天再来看看吧！</h3>
-{% endfor %}
-
-
-
-
-
-<ul class="pagination">
-
-    {% if blog_infos.has_previous %}
-        <li><a href="?page={{ blog_infos.previous_page_number }}">&laquo;</a></li>
     {% else %}
-        <li class="active"><a>&laquo;</a></li>
-    {% endif %}
+        <h3>这里空空的，过几天再来看看吧！</h3>
+    {% endfor %}
 
-    {% for p in page_range %}
-    {% ifequal p blog_infos.number %}
-    <li class="active"><a>{{ p }}</a></li>
-    {% else %}
-    <li><a href="?page={{ p }}" title="第{{ p }}页">{{ p }}</a>
-    <li>
-        {% endifequal %}
+
+
+
+
+    <ul class="pagination">
+        {% if pager.has_pre %}
+            <li><a href="?curr_page={{ pager.page-1 }}">&laquo;</a></li>
+        {% else %}
+            <li class="active"><a>&laquo;</a></li>
+            {#    {% if blog_infos.has_previous %}#}
+            {#        <li><a href="?page={{ blog_infos.previous_page_number }}">&laquo;</a></li>#}
+            {#    {% else %}#}
+            {#        <li class="active"><a>&laquo;</a></li>#}
+            {#    {% endif %}#}
+        {% endif %}
+        {% for num in pager.nums %}
+            {% if num == pager.page %}
+                <li class="active"><a>{{ num }}</a></li>
+            {% else %}
+                <li><a href="?curr_page={{ num }}" title="第{{ num }}页">{{ num }}</a></li>
+            {% endif %}
         {% endfor %}
-
-        {% if blog_infos.has_next %}
-            <li><a href="?page={{ blog_infos.next_page_number }}">&raquo;</a></li>
+        {% if pager.has_next %}
+            <li><a href="?curr_page={{ pager.page+1 }}">&raquo;</a></li>
         {% else %}
             <li class="active"><a>&raquo;</a></li>
         {% endif %}
-</ul>
+        {#    {% for p in total_num %}#}
+        {#    {% ifequal p blog_infos.number %}#}
+        {#    <li class="active"><a>{{ p }}</a></li>#}
+        {#    {% else %}#}
+        {#    <li><a href="?page={{ p }}" title="第{{ p }}页">{{ p }}</a>#}
+        {#    <li>#}
+        {#        {% endifequal %}#}
+        {#        {% endfor %}#}
+        {##}
+        {#        {% if blog_infos.has_next %}#}
+        {#            <li><a href="?page={{ blog_infos.next_page_number }}">&raquo;</a></li>#}
+        {#        {% else %}#}
+        {#            <li class="active"><a>&raquo;</a></li>#}
+        {#        {% endif %}#}
+    </ul>
 
 
 {% endblock %}
 
 
-{% block lastest_blog %}
-    {% for blog in latest %}
-        <li><a href="{% url 'blog_detail' blog|get_value:'id' %} " target=_blank>{% blog|get_value:'title' %}</a></li>
-    {% endfor %}
-{% endblock %}
+{#{% block lastest_blog %}#}
+{#    {% for blog in latest %}#}
+{#        <li><a href="{% url 'blog_detail' blog|get_value:'id' %} " target=_blank>{% blog|get_value:'title' %}</a></li>#}
+{#    {% endfor %}#}
+{#{% endblock %}#}
 
-{% block tags %}
-    <h5>
-        {% include "tag_info.html" %}
-    </h5>
-{% endblock %}
+{#{% block tags %}#}
+{#    <h5>#}
+{#        {% include "tag_info.html" %}#}
+{#    </h5>#}
+{#{% endblock %}#}
 
-{% block friends %}
-
-    {% include "friends.html" %}
-
-{% endblock %}
+{#{% block friends %}#}
+{##}
+{#    {% include "friends.html" %}#}
+{##}
+{#{% endblock %}#}
