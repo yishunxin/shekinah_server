@@ -25,14 +25,12 @@
 
 {% block title_list %}
 
-{% if length(blog_infos)== 0 %}
-    <h3>这里空空的，过几天再来看看吧！</h3>
-{% endif %}
+
 {% for blog_info in blog_infos %}
     {% include "list_style.html" %}
 
-    {% empty %}
-    <h3>这个人好懒，一个字都没写</h3>
+{% else %}
+    <h3>这里空空的，过几天再来看看吧！</h3>
 {% endfor %}
 
 
