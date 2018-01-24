@@ -5,7 +5,7 @@ from sqlalchemy import desc
 
 from gs.common.cdb import db
 from gs.conf import const
-from gs.model.blog import Paper
+from gs.model.blog import Paper, Tag
 
 logging.getLogger('paper')
 
@@ -26,3 +26,7 @@ class PaperSvc(object):
     def last_paper(self):
         papers = db.session.query(Paper).order_by(desc(Paper.create_time)).limit(const.DEFAULT_LIMIT).all()
         return papers
+
+    def tag_list(self):
+        tags = db.session.query(Tag).all()
+        return tags

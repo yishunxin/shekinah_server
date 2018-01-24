@@ -1,7 +1,7 @@
-   {% for tag in tags %}
+   {% for tag in tag_list %}
 
-   		<a href="{% url 'tag' tag.id %}">
-   			<span class="label label-default">{{ tag.tag }}</span>&nbsp;&nbsp;
+   		<a href="/tag/{{ tag.tag_id }}">
+   			<span class="label label-default">{{ tag.name }}</span>&nbsp;&nbsp;
    		</a>
 
    {% endfor %}
