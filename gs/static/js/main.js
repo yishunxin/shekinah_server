@@ -70,6 +70,28 @@ $(document).ready(function () {
         return false;
     });
 
+    // 阅读全文
+    $(".blog_collapse").click(function () {
+        var collapse = $(this).data('collapse');
+        console.log(collapse);
+        var t_node = $(this).parent('div').prev('div');
+        t_span = $(this).find('span')
+        if (collapse == 'True') {
+            t_node.css('-webkit-line-clamp', 'unset');
+            t_span.removeClass('glyphicon-chevron-down')
+            t_span.addClass('glyphicon-chevron-up')
+            $(this)[0].childNodes[1].textContent=' 收起';
+            $(this).data('collapse', 'False')
+        }
+        else {
+            t_node.css('-webkit-line-clamp', '4');
+            t_span.removeClass('glyphicon-chevron-up')
+            t_span.addClass('glyphicon-chevron-down')
+            $(this)[0].childNodes[1].textContent=' 阅读全文';
+            $(this).data('collapse', 'True')
+        }
+    });
+
     // $("#ds-thread #ds-reset .ds-replybox .ds-avatar img").addClass("img-circle");
 
     //responsive navigation
