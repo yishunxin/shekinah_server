@@ -10,13 +10,12 @@
 {% endblock %}
 
 {% block blog_list %}
-    {% call com.blog_list(paper_list) %}
-    {% endcall %}
+    {{ com.blog_list(paper_list) }}
 {% endblock %}
 {% block pagenation %}
-    {% call com.pagenation(pager) %}
+    {{ com.pagenation(pager) }}
 {% endblock %}
 
 {% block lastest_blog %}
-    {% call com.last_blog %}
+    {{ com.last_blog(last_paper) }}
 {% endblock %}

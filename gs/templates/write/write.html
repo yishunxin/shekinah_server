@@ -1,0 +1,486 @@
+{% import 'component.html' as com %}
+<!DOCTYPE html>
+<html lang="en" style="height: 100%;width: 100%">
+<head>
+    <title>写博客</title>
+    {% block seo %}
+        <meta name="description" content="易顺鑫shekinah1995的个人博客网站"/>
+        <meta name="keywords" content="易顺鑫,shekinah1995,python程序员"/>
+    {% endblock %}
+    <meta name="robots" content="index,follow"/>
+    <meta name="author" content="shekinah1995"/>
+    <meta http-equiv="content-Type" content="text/html;charset=utf8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
+    <meta name="baidu-site-verification" content="lplLbq63Lo"/>
+    {{ com.render_css() }}
+    {{ com.render_js() }}
+    <!-- 样式文件 -->
+    <link rel="stylesheet" href="/static/umeditor/themes/default/css/umeditor.css">
+    <!-- 引用jquery -->
+    <script src="/static/umeditor/third-party/jquery.min.js"></script>
+    <!-- 引入 etpl -->
+    <script type="text/javascript" src="/static/umeditor/third-party/template.min.js"></script>
+    <!-- 配置文件 -->
+    <script type="text/javascript" src="/static/umeditor/umeditor.config.js"></script>
+    <!-- 编辑器源码文件 -->
+    <script type="text/javascript" src="/static/umeditor/umeditor.js"></script>
+    <!-- 语言包文件 -->
+    <script type="text/javascript" src="/static/umeditor/lang/zh-cn/zh-cn.js"></script>
+    <!-- 实例化编辑器代码 -->
+    <script type="text/javascript">
+        $(function () {
+            window.um = UM.getEditor('myEditor', {
+                /* 传入配置参数,可配参数列表看umeditor.config.js */
+                toolbar: [
+                    'undo redo | bold italic underline strikethrough | superscript subscript | forecolor backcolor |',
+                    'insertorderedlist insertunorderedlist | paragraph fontfamily fontsize',
+                    '| justifyleft justifycenter justifyright justifyjustify |',
+                    'link unlink | emotion image video |',
+                    'horizontal fullscreen', 'formula'
+                ],
+                autoHeightEnabled: false,
+                initialFrameWidth: null,
+                initialFrameHeight: null
+            });
+        });
+    </script>
+</head>
+<style>
+    body {
+        font-size: 14px;
+        line-height: 1.5;
+        color: rgba(0, 0, 0, .65);
+        background-color: #fff;
+    }
+
+    a {
+        color: #1890ff;
+        background-color: transparent;
+        text-decoration: none;
+        outline: none;
+        cursor: pointer;
+        -webkit-transition: color .3s;
+        -o-transition: color .3s;
+        transition: color .3s;
+        -webkit-text-decoration-skip: objects;
+    }
+
+    ul {
+        padding: 0;
+    }
+
+    .left {
+        width: 17%;
+        height: 100%;
+        background-color: #404040;
+        color: #f2f2f2;
+    }
+
+    .middle {
+        width: 25%;
+        overflow-y: scroll;
+        height: 100%;
+    }
+
+    .right {
+        width: 60%;
+        height: 100%;
+        padding-top: 20px;
+    }
+
+    .back {
+        padding: 30px 18px 5px;
+        text-align: center;
+    }
+
+    .back a {
+        display: block;
+        font-size: 15px;
+        padding: 9px 0;
+        color: #ec7259;
+        border: 1px solid rgba(236, 114, 89, .8);
+        border-radius: 20px;
+        -webkit-transition: border-color .2s ease-in;
+        -o-transition: border-color .2s ease-in;
+        transition: border-color .2s ease-in;
+    }
+
+    .new {
+        padding: 0 15px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+
+    .add_book {
+        display: none;
+        overflow: hidden;
+        -webkit-transition: all .2s ease-out;
+        -o-transition: all .2s ease-out;
+        transition: all .2s ease-out;
+    }
+
+    .add_book form {
+        overflow: hidden;
+        margin: 10px 0 0;
+        -webkit-transition: all .2s ease-out;
+        -o-transition: all .2s ease-out;
+        transition: all .2s ease-out;
+        height: 85px;
+        opacity: 1;
+    }
+
+    .add_book input {
+        width: 100%;
+        height: 35px;
+        color: #ccc;
+        background-color: #595959;
+        border: 1px solid #333;
+        padding: 4px 6px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    .book_list {
+        background-color: #8c8c8c;
+        margin-bottom: 50px;
+    }
+
+    .book_item {
+        position: relative;
+        line-height: 40px;
+        list-style: none;
+        font-size: 15px;
+        color: #f2f2f2;
+        background-color: #404040;
+        padding: 0 15px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-transition: padding .2s;
+        -o-transition: padding .2s;
+        transition: padding .2s;
+    }
+
+    .book_item span {
+        display: block;
+        margin-right: 20px;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .selected {
+        background-color: #666666;
+        border-left: 3px solid #ec7259;
+    {#        padding-left: 12px;#}
+    }
+
+    .book_item:hover {
+        background-color: #666666;
+    }
+
+    .new_paper {
+        line-height: 20px;
+        font-size: 15px;
+        font-weight: 400;
+        padding: 20px 0 20px 25px;
+        cursor: pointer;
+        color: #595959;
+    }
+
+    .new_paper i {
+        padding-right: 3px;
+        font-size: 18px;
+        vertical-align: bottom;
+    }
+
+    .paper_list {
+        position: relative;
+        margin-bottom: 0;
+        background-color: #efe9d9;
+        border-top: 1px solid #d9d9d9;
+    }
+
+    .paper_item:hover {
+        background-color: #e6e6e6;
+    }
+
+    .paper_item {
+        position: relative;
+        height: 90px;
+        color: #595959;
+        background-color: #fff;
+        margin-bottom: 0;
+        padding: 15px 10px 15px 60px;
+        -webkit-box-shadow: 0 0 0 1px #d9d9d9;
+        box-shadow: 0 0 0 1px #d9d9d9;
+        border-left: 5px solid transparent;
+        list-style: none;
+        line-height: 60px;
+        cursor: pointer;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+    }
+
+    .book_icon {
+        position: absolute;
+        top: 25px;
+        left: 12px;
+        width: 35px;
+        height: 40px;
+    }
+
+    .paper_select {
+        border-left-color: #ec7259;
+    }
+
+    .title {
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        margin-right: 40px;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+        font-size: 18px;
+    }
+
+    .brief {
+        display: block;
+        height: 30px;
+        line-height: 30px;
+        margin-right: 40px;
+        overflow: hidden;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .words {
+        position: absolute;
+        bottom: 2px;
+        left: 5px;
+        font-size: 9px;
+        line-height: 16px;
+        color: #595959;
+    }
+
+    .save {
+        font-size: 20px;
+        color: #a9a7a7;
+        position: absolute;
+        right: 20px;
+        top: 2px;
+    }
+
+    .write_container {
+        height: 100%;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+    }
+
+    .input_title {
+        width: 100%;
+        padding: 0 80px 10px 40px;
+        margin-bottom: 0;
+        border: none;
+        font-size: 30px;
+        font-weight: 400;
+        line-height: 30px;
+        -webkit-box-shadow: none;
+        box-shadow: none;
+        color: #595959;
+        background-color: transparent;
+        outline: none;
+        border-radius: 0;
+        -o-text-overflow: ellipsis;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .umeditor {
+        width: 100%;
+        border: none;
+        height: calc(100vh - 21px - 44px - 35px);
+    }
+
+    .editor-container {
+        overflow-y: hidden
+    }
+
+    .save_menu {
+        min-width: 30px;
+        left: -45px;
+    }
+
+    #book_name {
+        width: 100%;
+        height: 35px;
+        color: #ccc;
+        background-color: #595959;
+        border: 1px solid #333;
+        padding: 4px 6px;
+        margin-bottom: 10px;
+        font-size: 14px;
+        line-height: 20px;
+    }
+
+    ._3zXcJ {
+        position: relative;
+        display: inline-block;
+        text-align: center;
+        height: 30px;
+        line-height: 20px;
+        padding: 4px 12px;
+        border: 1px solid transparent;
+        border-radius: 15px;
+        font-size: 14px;
+        font-weight: 500;
+        -ms-touch-action: manipulation;
+        touch-action: manipulation;
+        cursor: pointer;
+        background-image: none;
+        white-space: nowrap;
+        -webkit-user-select: none;
+        -moz-user-select: none;
+        -ms-user-select: none;
+        user-select: none;
+        -webkit-transition: all .2s cubic-bezier(.645, .045, .355, 1);
+        -o-transition: all .2s cubic-bezier(.645, .045, .355, 1);
+        transition: all .2s cubic-bezier(.645, .045, .355, 1);
+        color: #595959;
+        background-color: #fff;
+        border-color: transparent;
+    }
+
+    .dwU8Q {
+        color: #42c02e;
+        border-color: #42c02e;
+        margin-left: 4px;
+        background-color: #404040;
+    }
+
+    .dwU8Q:active {
+        color: #42c02e;
+        background-color: #404a3e;
+        border-color: #42c02e;
+    }
+
+    .vIzwB {
+        color: #b3b3b3;
+        background-color: #404040;
+        border-color: transparent;
+    }
+
+    .vIzwB:hover {
+        color: #CCCCCC;
+    }
+
+    ._1iZMb {
+        padding: 0 15px;
+        margin-top: 20px;
+        margin-bottom: 10px;
+    }
+</style>
+<body style="height: 100%;width: 100%;margin: 0;">
+
+<div id="root" style="width: 100%;height: 100%;">
+    <div class="" style="width: 100%;height: 100%;display: flex">
+        <div class="left">
+            <div class="back">
+                <a href="/">回首页</a>
+            </div>
+            <div class="_1iZMb">
+                <div class="new" id="new"><i class="glyphicon glyphicon-plus"></i><span>新建文集</span></div>
+                <div class="add_book">
+                    <form class="" action=""><input type="text" placeholder="请输入文集名..." name="name" id="book_name">
+                        <button type="submit" class=" dwU8Q _3zXcJ"><span>提 交</span></button>
+                        <button type="button" class="vIzwB _3zXcJ" id="cancel"><span>取 消</span></button>
+                    </form>
+                </div>
+            </div>
+            <ul class="book_list">
+                {% for book in book_list %}
+                    <li class="book_item" title={{ book.name }}><span>{{ book.name }}</span></li>
+                    <li class="book_item" title={{ book.name }}><span>{{ book.name }}</span></li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="middle">
+            <div class="new_paper"><i class="glyphicon glyphicon-plus-sign"></i><span> 新建文章</span></div>
+            <ul class="paper_list">
+                <li class="paper_item" title="2018-06-29">
+                    <svg class="icon book_icon" aria-hidden="true">
+                        <use xlink:href="#icon-wenjian"></use>
+                    </svg>
+                    <div class="_3P4JX poOXI" style="display: none"><i class="fa fa-gear"></i><span><ul
+                            class="_2V8zt _3FcHm _2w9pn"><li
+                            class="_2po2r cRfUr" title=""><i class="fa fa-share _22XWG"></i>直接发布</li><li
+                            class="_3nZXj _2_WAp _3df2u _2po2r cRfUr" title=""><i class="fa fa-folder-open _22XWG"></i>移动文章<div
+                            class="_3x4X_"><ul class="_2KzJx oGKRI _3DXDE _2w9pn"><li class="_2po2r cRfUr" title="日记本">日记本</li></ul></div></li><li
+                            class="_2po2r cRfUr" title=""><i class="fa fa-clock-o _22XWG"></i>历史版本</li><li
+                            class="_2po2r cRfUr" title=""><i class="fa fa-trash-o _22XWG"></i>删除文章</li></ul></span>
+                    </div>
+                    <span class="title">2018-06-29</span><span class="hLzJv"></span>
+                    <span class="words">字数:0</span>
+                    <span class="brief">fgfdgfdsgfdsdsfgsdfgsdsgfdfsgdfstrrrrrrrrrrrrrrrrrrrrrrrrregf</span>
+                </li>
+                <li class="paper_item" title="无标题文章">
+                    <svg class="icon book_icon" aria-hidden="true">
+                        <use xlink:href="#icon-wenjian"></use>
+                    </svg>
+                    <span class="title">无标题文章</span></li>
+                </li>
+            </ul>
+        </div>
+        <div class="right">
+            <div class="save">
+                <i class="glyphicon glyphicon-option-horizontal dropdown-toggle" id="dropdownMenu1"
+                                 data-toggle="dropdown"
+                                 aria-haspopup="true" aria-expanded="false"></i>
+                <ul class="dropdown-menu save_menu" aria-labelledby="dropdownMenu1">
+                    <li><a href="#">保存</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a href="#">发布</a></li>
+                </ul>
+            </div>
+            <div class="write_container">
+                <div>
+                    <input type="text" class="input_title" value="无标题文章">
+                </div>
+                <div class="editor-container">
+                    <!--style给定宽度可以影响编辑器的最终宽度-->
+                    <script type="text/plain" id="myEditor" class="umeditor"></script>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script>
+    $('.book_item').click(function () {
+        $(this).addClass("selected").siblings().removeClass('selected')
+    })
+    $('.paper_item').click(function () {
+        $(this).addClass("paper_select").siblings().removeClass('paper_select')
+    })
+    $('#new').click(function () {
+        $('.add_book').css('display', 'block')
+    })
+    $('#cancel').click(function () {
+        $('.add_book').css('display', 'none')
+    })
+</script>
+</html>

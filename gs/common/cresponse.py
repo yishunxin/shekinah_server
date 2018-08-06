@@ -9,6 +9,8 @@ def jsonify_response(code, msg=None, data=None, **kwdata):
 
 
 def common_json_response(**kwdata):
+    if 'code' not in kwdata:
+        kwdata['code'] = 0
     return recurjson.encode(kwdata)
 
 

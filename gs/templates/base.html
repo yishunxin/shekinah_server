@@ -1,4 +1,5 @@
-﻿<!DOCTYPE html>
+﻿{% import 'component.html' as com %}
+<!DOCTYPE html>
 <html>
 <head>
     <title>{% block title %}{% endblock %}</title>
@@ -11,19 +12,13 @@
     <meta http-equiv="content-Type" content="text/html;charset=utf8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0,user-scalable=no"/>
     <meta name="baidu-site-verification" content="lplLbq63Lo"/>
-
-
-    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css">
+    {{ com.render_css() }}
     <link rel="stylesheet" type="text/css" href="/static/css/style.css">
     <link rel="stylesheet" type="text/css" href="/static/css/index.css">
-
-
 </head>
 <body>
 {% include "header.html" %}
-
-
-<div class="container">
+<div class="container index">
     <div class="row">
         <div class="col-lg-12 col-md-10 col-sm-12 hidden-xs remove_padding">
             <div id="myCarousel" class="carousel slide">
@@ -67,16 +62,11 @@
     </div>
     <div class="row">
         <div class="col-lg-9 col-md-9 col-sm-9 remove_padding">
-
             <div id="timeline">
                 {% block blog_list %}
-
                 {% endblock %}
-
                 {% block pagenation %}
-
                 {% endblock %}
-
             </div>
         </div>
         <div class="col-lg-3 col-md-3 col-sm-3 remove_padding">
@@ -97,24 +87,14 @@
             </div>
         </div>
     </div>
-
-
     <div class="row">
         <div class="col-lg-12 col-md-10 col-sm-12 hidden-xs remove_padding">
             {% include "footer.html" %}
         </div>
     </div>
-
 </div>
-
 <div id="return_top" class="hidden-sm hidden-xs"><a href="#"><img src="/static/img/return_top.png"/></a>
 </div>
-
-
-<script src="/static/js/jquery-1.11.3.min.js"></script>
-<script src="/static/js/bootstrap/bootstrap.min.js"></script>
-<script src="/static/js/main.js"></script>
-
-
+{{ com.render_js() }}
 </body>
 </html>

@@ -1,4 +1,21 @@
-{% macro blog_list(blist) %}
+{% macro render_css() %}
+    <link rel="stylesheet" type="text/css" href="/static/css/bootstrap/bootstrap.min.css">
+    <style type="text/css">
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+    </style>
+{% endmacro %}
+{% macro render_js() %}
+    <script src="//at.alicdn.com/t/font_723896_1idkbrhs3rx.js"></script>
+    <script src="/static/js/jquery-1.11.3.min.js"></script>
+    <script src="/static/js/bootstrap/bootstrap.min.js"></script>
+{% endmacro %}
+{% macro blog_list(blist) -%}
     {% for blog in blist %}
         <div class="blog_list">
             <span class="label label-primary blog_tag">{{ blog.catalog_id }}</span>
@@ -22,9 +39,8 @@
     {% else %}
         <h3>这里空空的，过几天再来看看吧！</h3>
     {% endfor %}
-{% endmacro %}
-
-{% macro pagenation(paper) %}
+{%- endmacro %}
+{% macro pagenation(pager) %}
     <ul class="pagination">
         {% if pager.has_pre %}
             <li><a href="?curr_page={{ pager.page-1 }}">&laquo;</a></li>

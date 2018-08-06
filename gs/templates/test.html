@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" type="text/css" href="../static/css/bootstrap/bootstrap.min.css">
+    <style type="text/css">
+        .icon {
+            width: 1em;
+            height: 1em;
+            vertical-align: -0.15em;
+            fill: currentColor;
+            overflow: hidden;
+        }
+
+        li {
+            font-size: 20px;
+            height: 50px;
+            border-style: solid solid;
+        }
+    </style>
+</head>
+<body>
+<ul style="margin: 100px 0 0 500px;background-color: #D3D6DA;width: 300px">
+    <li class="item" draggable="true">1</li>
+    <li class="item" draggable="true">2</li>
+    <li class="item" draggable="true">3</li>
+    <li class="item" draggable="true">4</li>
+    <li class="item" draggable="true">5</li>
+</ul>
+<div id="recycle">回收站</div>
+<script src="//at.alicdn.com/t/font_723896_53hcssywp1m.js"></script>
+<script src="../static/js/jquery-1.11.3.min.js"></script>
+<script src="../static/js/bootstrap/bootstrap.min.js"></script>
+<script src="../static/js/main.js"></script>
+<script>
+    $('.item').click(function () {
+        this.addClass()
+    })
+    var source = document.querySelectorAll('.item'),
+        recycle = document.getElementById('recycle'),
+        dragElement = null,                                         // 用于存放拖动元素
+        lock = true;
+    for (var i = 0; i < source.length; i++) {
+        source[i].addEventListener('dragstart', function (ev) {
+            console.log('ev', ev)
+            console.log('dragstart,node', this)
+            dragElement = this
+            this.style.backgroundColor = '#f8f8f8'
+        }, false)
+        source[i].addEventListener('dragend', function (ev) {
+            console.log('dragend,ev', ev)
+            console.log('dragend,node', this)
+            ev.target.style.backgroundColor = '#fff';               // 拖放结束还原拖动元素的背景
+            ev.preventDefault();
+        }, false)
+        source[i].addEventListener('dragenter', function (ev) {
+            console.log('dragenter,ev', ev)
+            console.log('dragenter,node', this)
+            if (dragElement != this) {
+                this.parentNode.insertBefore(dragElement, this);     // 把拖动元素添加到当前元素的前面
+            }
+        }, false)
+        source[i].addEventListener('dragleave', function (ev) {
+            console.log('dragleave,ev', ev)
+            console.log('dragleave,node', this)
+            if (dragElement != this) {
+                if (lock && (this == this.parentNode.lastElementChild || this == this.parentNode.lastChild)) {    // 当前元素时最后一个元素
+                    this.parentNode.appendChild(dragElement);       // 把拖动元素添加最后面
+                    lock = false;
+                } else {
+                    lock = true;
+                }
+            }
+        }, false)
+    }
+
+    recycle.addEventListener('drop', function (ev) {                  // 拖进回收站则删除该元素
+        dragElement.parentNode.removeChild(dragElement);
+    }, false)
+
+    document.ondragover = function (e) {
+        e.preventDefault();
+    }          // 必须设置dragover阻止默认事件
+    document.ondrop = function (e) {
+        e.preventDefault();
+    }
+</script>
+</body>
+</html>

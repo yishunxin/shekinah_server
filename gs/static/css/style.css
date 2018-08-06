@@ -12,8 +12,8 @@ body {
     width: 100%;
     text-align: left;
     margin: 0 auto !important;
-    background-color: #444;
-    background-image: url(/static/img/bg.jpg);
+    background-color: #f6f6f6;
+    /*background-image: url(/static/img/bg.jpg);*/
     background-attachment: fixed;
     background-repeat: no-repeat;
     background-position: center;
@@ -56,6 +56,10 @@ a:hover {
 a:active {
     color: #ffffff;
     text-decoration: none;
+}
+
+.container {
+    margin-top: 10px;
 }
 
 .not_found {

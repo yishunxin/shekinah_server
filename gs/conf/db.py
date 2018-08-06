@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
-HOST = 'rm-uf6wy8u1cb50d61bto.mysql.rds.aliyuncs.com'
+HOST = '127.0.0.1'
 PORT = 3306
-USER = 'shekinah'
-PASSWD = 'ysb247365yStx'
+USER = 'root'
+PASSWD = ''
 DB = 'myblog'
 CHARSET = 'utf8'
 # sqlalchemy 配置 看下面的链接
