@@ -58,7 +58,7 @@ class Book(db.Model):
 
 class Essay(db.Model):
     __tablename__ = 'essay'
-    essay_id = db.Column(db.Integer, primary_key=True)
+    eid = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(255))
     create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
     content = db.Column(LONGTEXT)
@@ -86,3 +86,34 @@ class Tag(db.Model):
 
     def __repr__(self):
         return '<Tag tag_id=%s>' % self.tag_id
+
+
+class File(db.Model):
+    __tablename__ = 'file'
+    fid = db.Column(db.Integer, primary_key=True)
+    type = db.Column(db.String)
+    name = db.Column(db.String)
+    path = db.Column(db.String)
+
+
+class Photo(db.Model):
+    __tablename__ = 'photo'
+    pid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    fid = db.Column(db.Integer)
+    description = db.Column(db.String)
+    create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
+    album_id = db.Column(db.Integer)
+    tag_ids = db.Column(db.String)
+    status = db.Column(db.Integer, default=0)
+
+
+class Album(db.Model):
+    __tablename__ = 'album'
+    aid = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String)
+    description = db.Column(db.String)
+    create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
+    tag_ids = db.Column(db.String)
+    cover = db.Column(db.Integer)
+    status = db.Column(db.Integer, default=0)

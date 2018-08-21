@@ -1,10 +1,8 @@
 # -*- coding:utf-8 -*-
-import oss2
 from flask import session
 from gs.common import csession
 from gs.conf import const
 from gs.conf import store
-from gs.model.mi import User
 from gs.util import myutil
 
 from gs.util import mymodel
@@ -23,11 +21,5 @@ def get_curr_userid():
 
 def get_configs():
     return {
-        const.IMAGELINK_PRE: store.IMG_OUTER,
-        const.FILELINK_PRE: store.HOST_OUTER
+        'file_pre': store.domain,
     }
-
-
-def get_main_bucket():
-    auth = oss2.Auth(store.ACCESS_KEY, store.ACCESS_SECRET)
-    return oss2.Bucket(auth, store.ENDPOINT_INNER_NOSLASH, store.MAIN_BUCKET)

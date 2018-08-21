@@ -4,8 +4,8 @@ import logging
 from sqlalchemy import desc
 
 from gs.common.cdb import db
-from gs.conf import const
-from gs.model.blog import Paper, Tag, Book
+from gs.conf import const, store
+from gs.model.blog import Paper, Tag, Book, Album, Photo, File, Essay
 from gs.util import mymodel, mytime
 
 logger = logging.getLogger('paper')
@@ -106,6 +106,138 @@ class PaperSvc(object):
         try:
             db.session.query(Paper).filter(Paper.book_id == book_id).update(
                 {Paper.status: -1, Paper.update_time: mytime.get_now_datetime()})
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def album_list(self):
+        return db.session.query(Album).filter(Album.status == 0).order_by(desc(Album.create_time)).all()
+
+    def photo_list(self, aid):
+        q = db.session.query(Photo, File.path).filter(Photo.fid == File.fid, Photo.album_id == aid,
+                                                      Photo.status == 0).order_by(
+            desc(Photo.create_time)).all()
+        result = list()
+        for photo, path in q:
+            photo.file = store.domain + '/' + path
+            result.append(photo)
+        return result
+
+    def album_save(self, album):
+        aid = album.aid
+        try:
+            if not aid:
+                db.session.add(album)
+            else:
+                t_dict = mymodel.model_todbdict(album)
+                t_dict.pop('aid')
+                t_dict.pop('create_time')
+                db.session.query(Album).filter(Album.aid == aid).update(t_dict)
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def photo_save(self, photo):
+        pid = photo.pid
+        try:
+            if not pid:
+                db.session.add(photo)
+            else:
+                t_dict = mymodel.model_todbdict(photo)
+                t_dict.pop('pid')
+                t_dict.pop('fid')
+                t_dict.pop('album_id')
+                db.session.query(Photo).filter(Photo.pid == pid).update(t_dict)
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def album_get(self, aid):
+        return db.session.query(Album).get(aid)
+
+    def album_delete(self, aid):
+        try:
+            album = self.album_get(aid)
+            photos = db.session.query(Photo).filter(Photo.album_id == aid).all()
+            fids = [photo.fid for photo in photos]
+            if album.cover:
+                fids.append(album.cover)
+            db.session.query(Album).filter(Album.aid == aid).delete()
+            db.session.query(Photo).filter(Photo.album_id == aid).delete()
+            db.session.query(File).filter(File.fid.in_(fids)).delete(synchronize_session='fetch')
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def photo_delete(self, pids):
+        try:
+            db.session.query(File).filter(File.fid == Photo.fid, Photo.pid.in_(pids)).delete(
+                synchronize_session='fetch')
+            db.session.query(Photo).filter(Photo.pid.in_(pids)).delete(synchronize_session='fetch')
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            return False
+
+    def file_save(self, file):
+        try:
+            db.session.add(file)
+            db.session.flush()
+            db.session.commit()
+            return file.fid
+        except Exception as e:
+            logger.exception(e)
+            return False
+
+    def photo_recycle(self, pids):
+        try:
+            db.session.query(Photo).filter(Photo.pid.in_(pids)).update(Photo.status == -1, synchronize_session='fetch')
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            return False
+
+    def album_recycle(self, aid):
+        try:
+            db.session.query(Photo).filter(Photo.album_id == aid).update(Photo.status == -1)
+            db.session.query(Album).filter(Album.aid == aid).delete()
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            return False
+
+    def essay_list(self):
+        essay_list = db.session.query(Essay).order_by(desc(Essay.create_time)).all()
+        return essay_list
+
+    def essay_save(self, essay):
+        try:
+            db.session.add(essay)
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def essay_delete(self, eid):
+        try:
+            db.session.query(Essay).filter(Essay.eid == eid).delete()
             db.session.commit()
             return True
         except Exception as e:
