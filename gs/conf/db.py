@@ -1,10 +1,11 @@
 # -*- coding:utf-8 -*-
-HOST = '127.0.0.1'
+# huawei mysql
+HOST = '114.116.81.153'
 PORT = 3306
-USER = 'root'
-PASSWD = ''
+USER = 'shekinah'
+PASSWD = 'Shekinah@365'
 DB = 'myblog'
-CHARSET = 'utf8'
+CHARSET = 'utf8mb4'
 # sqlalchemy 配置 看下面的链接
 # http://www.pythondoc.com/flask-sqlalchemy/config.html
 # 操作函数 sqlalchemy.sql.operators.ColumnOperators
