@@ -64,6 +64,8 @@ class Essay(db.Model):
     content = db.Column(LONGTEXT)
     author = db.Column(db.String(255))
     catalog_id = db.Column(db.Integer)
+    photos = db.Column(db.String(255))
+    videos = db.Column(db.String(255))
     status = db.Column(db.Integer)
 
     def __repr__(self):
@@ -117,3 +119,12 @@ class Album(db.Model):
     tag_ids = db.Column(db.String)
     cover = db.Column(db.Integer)
     status = db.Column(db.Integer, default=0)
+
+
+class Note(db.Model):
+    __tablename__ = 'note'
+    nid = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String)
+    status = db.Column(db.Integer)
+    create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
+    finish_time = db.Column(db.DateTime)

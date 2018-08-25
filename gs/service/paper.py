@@ -22,7 +22,7 @@ class PaperSvc(object):
         return paper_list
 
     def blog_list(self, start=0, limit=None):  # todo 博客列表需要优化
-        q = db.session.query(Paper)
+        q = db.session.query(Paper).filter(Paper.status == 0)
         count = q.count()
         if start is not None:
             q = q.offset(start)
@@ -223,6 +223,9 @@ class PaperSvc(object):
 
     def essay_list(self):
         essay_list = db.session.query(Essay).order_by(desc(Essay.create_time)).all()
+        for essay in essay_list:
+            essay.photo_list = essay.photos.split(',') if essay.photos else []
+            essay.video_list = essay.videos.split(',') if essay.videos else []
         return essay_list
 
     def essay_save(self, essay):
@@ -238,6 +241,16 @@ class PaperSvc(object):
     def essay_delete(self, eid):
         try:
             db.session.query(Essay).filter(Essay.eid == eid).delete()
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def note_save(self, note):
+        try:
+            db.session.add(note)
             db.session.commit()
             return True
         except Exception as e:
