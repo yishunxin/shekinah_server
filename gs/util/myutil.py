@@ -43,7 +43,7 @@ def get_vcode():
     return ''.join(random.Random().sample(map(str, range(10)), 6))
 
 
-dataurl_font = ImageFont.truetype(size=40)
+dataurl_font = ImageFont.truetype('msyh.ttf', 40)
 
 
 def getdataurl(name):
