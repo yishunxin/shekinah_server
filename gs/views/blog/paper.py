@@ -5,7 +5,7 @@ from flask import render_template, request
 from gs.common import cstore, cbusi
 from gs.common.cresponse import common_json_response, jsonify_response
 from gs.conf import apicode
-from gs.model.blog import Book, Paper, Album, Photo, File, Essay
+from gs.model.blog import Book, Paper, Album, Photo, File, Essay, Note
 from gs.service.paper import PaperSvc
 from gs.util import mymodel, myreq
 from gs.views import bp_blog
@@ -248,6 +248,45 @@ def essay_delete():
         if not bo:
             return jsonify_response(apicode.ERROR)
         return jsonify_response(apicode.OK)
+    except Exception as e:
+        logger.exception(e)
+        return jsonify_response(apicode.ERROR)
+
+
+@bp_blog.route('/note/save', methods=['POST'])
+def note_save():
+    try:
+        note = mymodel.formtomodel(request.form, Note)
+        bo = PaperSvc().note_save(note)
+        if not bo:
+            return jsonify_response(apicode.ERROR)
+        return jsonify_response(apicode.OK)
+    except Exception as e:
+        logger.exception(e)
+        return jsonify_response(apicode.ERROR)
+
+
+@bp_blog.route('/note/changestatus', methods=['GET'])
+def note_changestatus():
+    try:
+        status = int(myreq.getvalue_from_request('status'))
+        nid = myreq.getvalue_from_request('nid')
+        bo = PaperSvc().note_changestatus(nid, status)
+        if not bo:
+            return jsonify_response(apicode.ERROR)
+        return jsonify_response(apicode.OK)
+    except Exception as e:
+        logger.exception(e)
+        return jsonify_response(apicode.ERROR)
+
+
+@bp_blog.route('/note/list', methods=['GET'])
+def note_list():
+    try:
+        year = int(myreq.getvalue_from_request('year'))
+        month = int(myreq.getvalue_from_request('month'))
+        notes = PaperSvc().note_list(year, month)
+        return common_json_response(notes=notes)
     except Exception as e:
         logger.exception(e)
         return jsonify_response(apicode.ERROR)

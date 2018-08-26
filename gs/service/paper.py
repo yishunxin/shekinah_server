@@ -1,11 +1,12 @@
 # -*- coding:utf-8 -*-
+import datetime
 import logging
 
 from sqlalchemy import desc
 
 from gs.common.cdb import db
 from gs.conf import const, store
-from gs.model.blog import Paper, Tag, Book, Album, Photo, File, Essay
+from gs.model.blog import Paper, Tag, Book, Album, Photo, File, Essay, Note
 from gs.util import mymodel, mytime
 
 logger = logging.getLogger('paper')
@@ -251,6 +252,25 @@ class PaperSvc(object):
     def note_save(self, note):
         try:
             db.session.add(note)
+            db.session.commit()
+            return True
+        except Exception as e:
+            logger.exception(e)
+            db.session.rollback()
+            return False
+
+    def note_list(self, year, month):
+        month_begin = mytime.get_lastday_of_month(year, month)
+        month_end = datetime.datetime(year, month, 01, 0, 0, 0)
+        notes = db.session.query(Note).filter(Note.status != -1, Note.create_time >= month_begin,
+                                              Note.create_time <= month_end).order_by(Note.create_time).all()
+        for note in notes:
+            note.status_bo = True if note.status == 2 else False
+        return notes
+
+    def note_changestatus(self, nid, status):
+        try:
+            db.session.query(Note).filter(Note.nid == nid).update(Note.status == status)
             db.session.commit()
             return True
         except Exception as e:

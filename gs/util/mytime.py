@@ -378,3 +378,7 @@ def get_today_month(n=0):
     # if (int(day) < int(d)):
     #     arr = (y, m, day)
     # return "-".join("%s" % i for i in arr)
+
+
+def get_lastday_month(year, month):
+    return datetime.datetime(year=year, month=month, day=calendar.mdays[month], hour=23, minute=59, second=59)

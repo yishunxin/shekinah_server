@@ -125,6 +125,6 @@ class Note(db.Model):
     __tablename__ = 'note'
     nid = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String)
-    status = db.Column(db.Integer)
+    status = db.Column(db.Integer, default=1)
     create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
     finish_time = db.Column(db.DateTime)
