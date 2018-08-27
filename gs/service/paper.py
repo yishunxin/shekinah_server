@@ -262,8 +262,8 @@ class PaperSvc(object):
     def note_list(self, year, month):
         month_begin = mytime.get_lastday_of_month(year, month)
         month_end = datetime.datetime(year, month, 01, 0, 0, 0)
-        notes = db.session.query(Note).filter(Note.status != -1, Note.create_time >= month_begin,
-                                              Note.create_time <= month_end).order_by(Note.create_time).all()
+        notes = db.session.query(Note).filter(Note.status != -1, Note.start_time >= month_begin,
+                                              Note.start_time <= month_end).order_by(Note.start_time).all()
         for note in notes:
             note.status_bo = True if note.status == 2 else False
         return notes

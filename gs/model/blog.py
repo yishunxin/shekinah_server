@@ -127,4 +127,6 @@ class Note(db.Model):
     content = db.Column(db.String)
     status = db.Column(db.Integer, default=1)
     create_time = db.Column(db.DateTime, default=mytime.get_now_datetime)
+    start_time = db.Column(db.DateTime)
+    end_time = db.Column(db.DateTime)
     finish_time = db.Column(db.DateTime)
