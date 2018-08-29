@@ -7,5 +7,5 @@ from gs.conf import server
 bp_blog = Blueprint('blog', __name__,
                     template_folder='templates',
                     static_folder='static',
-                    url_prefix='api001')
+                    url_prefix='/api001')
 import blog
